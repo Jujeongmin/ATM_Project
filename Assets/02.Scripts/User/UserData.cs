@@ -1,16 +1,16 @@
-using System;
+using UnityEngine;
 
-[Serializable]
+[System.Serializable]
 public class UserData
 {
-    private string userName;
-    private int curMoney;
-    private int balanceMoney;
+    [SerializeField] private string name;
+    [SerializeField] private int cash;
+    [SerializeField] private int balance;
 
-    public UserData(string userName, int curMoney, int balanceMoney)
+    public UserData(string name, int cash, int balance)
     {
-        this.userName = userName;
-        this.curMoney = curMoney;
-        this.balanceMoney = balanceMoney;
+        this.name = name;
+        this.cash = cash;
+        this.balance = balance;
     }    
 }
