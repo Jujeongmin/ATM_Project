@@ -3,9 +3,9 @@ using UnityEngine;
 [System.Serializable]
 public class UserData
 {
-    [SerializeField] private string name;
-    [SerializeField] private int cash;
-    [SerializeField] private int balance;
+    public string name;
+    public int cash;
+    public int balance;
 
     public UserData(string name, int cash, int balance)
     {
