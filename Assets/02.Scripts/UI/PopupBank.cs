@@ -57,7 +57,7 @@ public class PopupBank : MonoBehaviour
             GameManager.Instance.userData.cash -= value;
             GameManager.Instance.userData.balance += value;
             Refresh();
-            GameManager.Instance.SaveData(1);
+            GameManager.Instance.SaveData();
         }
         else
         {
@@ -75,7 +75,7 @@ public class PopupBank : MonoBehaviour
                 GameManager.Instance.userData.balance += value;
                 depositInputField.text = "";
                 Refresh();
-                GameManager.Instance.SaveData(1);
+                GameManager.Instance.SaveData();
             }
             else
             {
@@ -101,7 +101,7 @@ public class PopupBank : MonoBehaviour
             GameManager.Instance.userData.cash += value;
             GameManager.Instance.userData.balance -= value;
             Refresh();
-            GameManager.Instance.SaveData(1);
+            GameManager.Instance.SaveData();
         }
         else
         {
@@ -119,7 +119,7 @@ public class PopupBank : MonoBehaviour
                 GameManager.Instance.userData.balance -= value;
                 withdrawInputField.text = "";
                 Refresh();
-                GameManager.Instance.SaveData(1);
+                GameManager.Instance.SaveData();
             }
             else
             {

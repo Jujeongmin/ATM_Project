@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public UserData userData;
 
     string path;
-    string filename = "save.json";
+    string filenamePrefix = "save_";
 
     private void Awake()
     {
@@ -15,9 +15,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(this);
-
             path = Application.persistentDataPath + "/";
-            LoadData(1);
         }
         else
         {
@@ -25,29 +23,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SaveData(int slot)
+    public void SaveData()
     {
+        string fullPath = path + filenamePrefix + userData.id + ".json";
         string data = JsonUtility.ToJson(userData, true);
-        File.WriteAllText(path + filename + slot, data);
-        Debug.Log($"저장: {data}");
+        File.WriteAllText(fullPath, data);
+        Debug.Log($"저장: {fullPath}");
     }
 
-    public void LoadData(int slot)
+    public bool LoadData(string userId)
     {
-        string fullPath = path + filename + slot;
+        string fullPath = path + filenamePrefix + userId + ".json";
 
-        if (File.Exists(fullPath))
-        {
-            string data = File.ReadAllText(fullPath);
-            userData = JsonUtility.FromJson<UserData>(data);
-            Debug.Log($"로드: {data}");
-        }
-        else
+        if (!File.Exists(fullPath))
         {
             print("저장된 데이터가 없습니다.");
-            userData = new UserData("주정민", 100000, 50000, "wnwjdals", "1234");
-            SaveData(slot);
-            print(fullPath);
+            return false;
         }
+
+        string data = File.ReadAllText(fullPath);
+        userData = JsonUtility.FromJson<UserData>(data);
+        Debug.Log($"로드: {data}");
+        return true;
     }
 }
