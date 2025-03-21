@@ -31,19 +31,40 @@ public class GameManager : MonoBehaviour
         Debug.Log($"저장: {fullPath}");
     }
 
-    public bool LoadData(string userId)
+    public UserData LoadData(string userId)
     {
         string fullPath = path + filenamePrefix + userId + ".json";
 
         if (!File.Exists(fullPath))
         {
-            print("저장된 데이터가 없습니다.");
-            return false;
+            return null;
         }
 
         string data = File.ReadAllText(fullPath);
-        userData = JsonUtility.FromJson<UserData>(data);
-        Debug.Log($"로드: {data}");
-        return true;
+        return JsonUtility.FromJson<UserData>(data);
+    }
+
+
+    //public bool LoadData(string userId)
+    //{
+    //    string fullPath = path + filenamePrefix + userId + ".json";
+
+    //    if (!File.Exists(fullPath))
+    //    {
+    //        print("저장된 데이터가 없습니다.");
+    //        return false;
+    //    }
+
+    //    string data = File.ReadAllText(fullPath);
+    //    userData = JsonUtility.FromJson<UserData>(data);
+    //    Debug.Log($"로드: {data}");
+    //    return true;
+    //}
+
+    public void SaveDataForUser(UserData userData)
+    {
+        string fullPath = path + filenamePrefix + userData.id + ".json";
+        string data = JsonUtility.ToJson(userData, true);
+        File.WriteAllText(fullPath, data);
     }
 }

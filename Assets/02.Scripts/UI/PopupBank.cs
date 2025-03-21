@@ -6,22 +6,29 @@ public class PopupBank : MonoBehaviour
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI cashText;
     public TextMeshProUGUI balanceText;
+    public TextMeshProUGUI sendErrorText;
 
-    public GameObject Buttons;
-    public GameObject Deposit;
-    public GameObject Withdraw;
+    public GameObject buttons;
+    public GameObject deposit;
+    public GameObject withdraw;
+    public GameObject send;
     public GameObject lack;
+    public GameObject sendError;
 
     public TMP_InputField depositInputField;
     public TMP_InputField withdrawInputField;
+    public TMP_InputField sendTargetInput;
+    public TMP_InputField sendMoneyInput;
 
     void Start()
     {
         Refresh();
-        Buttons.SetActive(true);
-        Deposit.SetActive(false);
-        Withdraw.SetActive(false);
+        buttons.SetActive(true);
+        deposit.SetActive(false);
+        withdraw.SetActive(false);
         lack.SetActive(false);
+        send.SetActive(false);
+        sendError.SetActive(false);
     }
 
     public void Refresh()
@@ -33,21 +40,65 @@ public class PopupBank : MonoBehaviour
 
     public void DepositBtnOnClick()
     {
-        Deposit.SetActive(true);
-        Buttons.SetActive(false);
+        deposit.SetActive(true);
+        buttons.SetActive(false);
     }
 
     public void WithdrawBtnOnClick()
     {
-        Withdraw.SetActive(true);
-        Buttons.SetActive(false);
+        withdraw.SetActive(true);
+        buttons.SetActive(false);
+    }
+
+    public void SendBtnOnClick()
+    {
+        send.SetActive(true);
+        buttons.SetActive(false);
+    }
+
+    public void SendRealBtn()
+    {
+        if (string.IsNullOrEmpty(sendTargetInput.text) ||
+            string.IsNullOrEmpty(sendMoneyInput.text) ||
+            !int.TryParse(sendMoneyInput.text, out int value) || value <= 0)
+        {
+            sendError.SetActive(true);
+            sendErrorText.text = "입력 정보를 확인해주세요.";
+        }
+        else if (GameManager.Instance.userData.balance < value)
+        {
+            sendError.SetActive(true);
+            sendErrorText.text = "잔액이 부족합니다.";
+        }
+        else
+        {
+            UserData targetUserData = GameManager.Instance.LoadData(sendTargetInput.text);
+
+            if (targetUserData == null)
+            {
+                sendError.SetActive(true);
+                sendErrorText.text = "대상이 없습니다.";                
+            }
+
+            GameManager.Instance.userData.balance -= value;
+
+            targetUserData.balance += value;
+
+            GameManager.Instance.SaveData();
+            GameManager.Instance.SaveDataForUser(targetUserData);
+            Refresh();
+
+            sendError.SetActive(true);
+            sendErrorText.text = "송금이 완료되었습니다.";
+        }
     }
 
     public void BackBtnOnClick()
     {
-        Deposit.SetActive(false);
-        Withdraw.SetActive(false);
-        Buttons.SetActive(true);
+        deposit.SetActive(false);
+        withdraw.SetActive(false);
+        send.SetActive(false);
+        buttons.SetActive(true);
     }
 
     public void DepositCashOnClick(int value)
@@ -92,6 +143,11 @@ public class PopupBank : MonoBehaviour
     public void LackOKButtonOnClick()
     {
         lack.SetActive(false);
+    }
+
+    public void SendErrorOKBut()
+    {
+        sendError.SetActive(false);
     }
 
     public void WithdrawCashOnClick(int value)

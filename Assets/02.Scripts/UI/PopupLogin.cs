@@ -69,22 +69,28 @@ public class PopupLogin : MonoBehaviour
         {
             loginErrorPanel.SetActive(true);
             loginErrorText.text = "아이디 혹은 비밀번호를 입력해주세요.";
-        }          
-        else if (!GameManager.Instance.LoadData(idLoginInput.text))
-        {
-            loginErrorPanel.SetActive(true);
-            loginErrorText.text = "회원이 존재하지 않습니다.";
-        }
-        else if(GameManager.Instance.userData.password != psLoginInput.text)
-        {
-            loginErrorPanel.SetActive(true);
-            loginErrorText.text = "비밀번호가 올바르지 않습니다.";
         }
         else
         {
-            //print($"로그인 완료 {GameManager.Instance.userData.name}");
-            UIManager.Instance.popupBank.SetActive(true);
-            UIManager.Instance.popupLogin.SetActive(false);
+            UserData loadedUserData = GameManager.Instance.LoadData(idLoginInput.text);
+
+            if (loadedUserData == null)
+            {
+                loginErrorPanel.SetActive(true);
+                loginErrorText.text = "회원이 존재하지 않습니다.";
+            }
+            else if (loadedUserData.password != psLoginInput.text)
+            {
+                loginErrorPanel.SetActive(true);
+                loginErrorText.text = "비밀번호가 올바르지 않습니다.";
+            }
+            else
+            {
+                GameManager.Instance.userData = loadedUserData;
+
+                UIManager.Instance.popupBank.SetActive(true);
+                UIManager.Instance.popupLogin.SetActive(false);
+            }
         }
     }
 
