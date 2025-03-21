@@ -13,6 +13,8 @@ JSON 데이터 저장 및 불러오기
 기본적인 UI 인터페이스
 
 📸 스크린샷
+![image](https://github.com/user-attachments/assets/3b5a8b59-1b28-42f4-943a-6af3d8b0dd3c)
+
 
 
 🚀 실행 방법
